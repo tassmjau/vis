@@ -239,6 +239,7 @@ static bool ui_term_backend_resize(Ui *tui, int width, int height) {
 }
 
 static void ui_term_backend_save(Ui *tui, bool fscr) {
+	curs_set(1);
 	if (fscr) {
 		def_prog_mode();
 		endwin();
@@ -250,6 +251,11 @@ static void ui_term_backend_save(Ui *tui, bool fscr) {
 static void ui_term_backend_restore(Ui *tui) {
 	reset_prog_mode();
 	wclear(stdscr);
+	curs_set(0);
+}
+
+static void ui_term_backend_cursor(Ui *tui, bool visible) {
+	curs_set(visible ? 1 : 0);
 }
 
 int ui_terminal_colors(void) {
@@ -273,7 +279,6 @@ ui_backend_init(Ui *ui, char *term)
 		nonl();
 		keypad(stdscr, TRUE);
 		meta(stdscr, TRUE);
-		curs_set(0);
 	}
 
 	return result;
@@ -284,12 +289,12 @@ void ui_terminal_resume(Ui *term) { }
 static void ui_term_backend_suspend(Ui *term) {
 	if (change_colors == 1)
 		undo_palette();
-	curs_set(1);
 }
 
 static void ui_term_backend_free(Ui *term) {
 	ui_term_backend_suspend(term);
 	endwin();
+	write(STDERR_FILENO, "\x1b[?25h", 6);
 }
 
 static bool is_default_color(CellColor c) {
