@@ -168,9 +168,15 @@ static bool ui_term_backend_resize(Ui *tui, int width, int height) {
 }
 
 static void ui_term_backend_save(Ui *tui, bool fscr) {
+	cursor_visible(true);
 }
 
 static void ui_term_backend_restore(Ui *tui) {
+	cursor_visible(false);
+}
+
+static void ui_term_backend_cursor(Ui *tui, bool visible) {
+	cursor_visible(visible);
 }
 
 int ui_terminal_colors(void) {
@@ -182,15 +188,14 @@ VIS_INTERNAL void
 ui_term_backend_suspend(Ui *tui)
 {
 	termkey_stop(&tui->termkey);
-	cursor_visible(true);
 	screen_alternate(false);
+	cursor_visible(true);
 }
 
 VIS_INTERNAL void
 ui_terminal_resume(Ui *tui)
 {
 	screen_alternate(true);
-	cursor_visible(false);
 	termkey_start(&tui->termkey, UI_TERMKEY_FLAGS);
 }
 
