@@ -26,7 +26,11 @@ vis:map(vis.modes.INSERT, "<C-n>", function()
 		candidates = table.concat(candidates, "\n")
 		local status, out, err = vis:pipe(candidates, "sort -u | vis-menu -b")
 		if status == 0 and out then
-			out = out:sub(#prefix + 1, #out - 1)
+			if out:sub(1, #prefix) == prefix then
+				out = out:sub(#prefix + 1, -2)
+			else
+				out = out:sub(1, -2)
+			end
 			file:insert(pos, out)
 			win.selection.pos = pos + #out
 		else
