@@ -294,7 +294,6 @@ static void ui_term_backend_suspend(Ui *term) {
 static void ui_term_backend_free(Ui *term) {
 	ui_term_backend_suspend(term);
 	endwin();
-	write(STDERR_FILENO, "\x1b[?25h", 6);
 }
 
 static bool is_default_color(CellColor c) {
