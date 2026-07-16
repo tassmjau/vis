@@ -480,6 +480,8 @@ VIS_INTERNAL int text_line_char_get(Text*, size_t pos);
 VIS_INTERNAL size_t text_line_char_set(Text*, size_t pos, int count);
 /* get display width of line upto `pos' */
 VIS_INTERNAL int text_line_width_get(Text*, size_t pos);
+/* get display width of line upto `pos', expanding tabs to `tabwidth' */
+VIS_INTERNAL int text_line_width_get_tabwidth(Text*, size_t pos, int tabwidth);
 /* get position of character being displayed at `width' in line containing `pos' */
 VIS_INTERNAL size_t text_line_width_set(Text*, size_t pos, int width);
 /* move to the next/previous grapheme on the same line */

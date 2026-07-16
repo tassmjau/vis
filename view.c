@@ -1137,7 +1137,7 @@ size_t view_cursors_line(Selection *s) {
 
 size_t view_cursors_col(Selection *s) {
 	size_t pos = view_cursors_pos(s);
-	return text_line_char_get(s->view->text, pos) + 1;
+	return text_line_width_get_tabwidth(s->view->text, pos, s->view->tabwidth) + 1;
 }
 
 int view_cursors_cell_set(Selection *s, int cell) {

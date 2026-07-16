@@ -163,6 +163,10 @@ int text_line_char_get(Text *txt, size_t pos) {
 }
 
 int text_line_width_get(Text *txt, size_t pos) {
+	return text_line_width_get_tabwidth(txt, pos, 1);
+}
+
+int text_line_width_get_tabwidth(Text *txt, size_t pos, int tabwidth) {
 	int width = 0;
 	mbstate_t ps = { 0 };
 	size_t bol = text_line_begin(txt, pos);
@@ -185,7 +189,7 @@ int text_line_width_get(Text *txt, size_t pos) {
 			/* assume NUL byte will be displayed as ^@ */
 			width += 2;
 		} else if (buf[0] == '\t') {
-			width++;
+			width += tabwidth - (width % tabwidth);
 		} else {
 			int w = wcwidth(wc);
 			if (w == -1)
